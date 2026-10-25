@@ -2,7 +2,7 @@
 
 Site statique (HTML/CSS/JS, sans build) qui présente les recherches pour le voyage du 10 au 18 avril 2027 et permet aux trois frères (et aux parents, pour avis) de voter sur chaque choix, avec un commentaire libre par question. Les votes sont stockés dans Firebase Firestore et s'affichent en direct chez tout le monde.
 
-Tant que Firebase n'est pas configuré, le site fonctionne en **mode démo** : les votes restent dans le navigateur de chacun.
+Le site est branché sur le projet Firebase `projet-laponie-2027`. Si `apiKey` est vidée dans `js/firebase-config.js`, il repasse en **mode démo** (votes gardés dans le navigateur de chacun).
 
 ## Structure
 
@@ -11,7 +11,7 @@ Tant que Firebase n'est pas configuré, le site fonctionne en **mode démo** : l
 | `index.html` | La page |
 | `js/data.js` | **Tout le contenu** : prénoms, plans, budgets, sources, questions de vote |
 | `js/app.js` | Affichage et logique de vote |
-| `js/firebase-config.js` | Config Firebase (à remplir) |
+| `js/firebase-config.js` | Config Firebase (projet `projet-laponie-2027`) |
 | `css/styles.css` | Style (clair/sombre, mobile) |
 | `firestore.rules` | Règles de sécurité Firestore |
 | `.nojekyll` | Désactive Jekyll sur GitHub Pages |
