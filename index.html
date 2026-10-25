@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laponie 2027</title>
+  <meta name="description" content="Raid motoneige en Laponie du 10 au 18 avril 2027 : les formules étudiées et les votes des trois frères.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#votes">Aller directement aux votes</a>
+
+  <nav class="topnav" aria-label="Sections">
+    <a class="brand" href="#top">Laponie 2027</a>
+    <div class="links">
+      <a href="#plans">Formules</a>
+      <a href="#comparatif">Comparatif</a>
+      <a href="#pratique">Pratique</a>
+      <a class="cta" href="#votes">Voter</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="eyebrow" id="trip-dates"></p>
+      <h1 id="trip-title"></h1>
+      <p class="lead" id="trip-summary"></p>
+      <p class="voters-line">Équipage : <span id="trip-voters"></span></p>
+      <a class="button" href="#votes">Donner mon avis</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="plans" class="section">
+      <div class="section-head">
+        <h2>Les trois formules</h2>
+        <p>Prix indicatifs relevés en ligne, par personne, à revalider auprès des agences pour avril 2027.</p>
+      </div>
+      <div class="plans" id="plans-list"></div>
+    </section>
+
+    <section id="comparatif" class="section">
+      <div class="section-head">
+        <h2>En un coup d'œil</h2>
+      </div>
+      <div class="table-wrap" id="compare-table"></div>
+    </section>
+
+    <section id="pratique" class="section">
+      <div class="section-head">
+        <h2>Infos pratiques</h2>
+      </div>
+      <div class="cards" id="practical-list"></div>
+      <article class="card warning">
+        <h3>Points de vigilance</h3>
+        <ul id="warnings-list"></ul>
+      </article>
+    </section>
+
+    <section id="votes" class="section votes">
+      <div class="section-head">
+        <h2>Les votes</h2>
+        <p>Chacun choisit son prénom puis vote. Tu peux changer d'avis quand tu veux : ton dernier choix remplace le précédent.</p>
+      </div>
+
+      <p class="banner" id="demo-banner" hidden>
+        <strong>Mode démo.</strong> La base de votes Firebase n'est pas encore branchée : les votes restent dans ce navigateur et tes frères ne les voient pas. Voir le README pour l'activer.
+      </p>
+
+      <div class="picker-bar">
+        <div class="picker" id="voter-picker"></div>
+        <p class="status" id="sync-status" role="status"></p>
+      </div>
+
+      <aside class="recap card" aria-labelledby="recap-title">
+        <h3 id="recap-title">Où on en est</h3>
+        <div id="recap"></div>
+      </aside>
+
+      <div class="questions" id="questions-list"></div>
+    </section>
+
+    <section id="sources" class="section">
+      <div class="section-head">
+        <h2>Sources</h2>
+        <p>Recherche complète : <a href="docs/recherches-perplexity.md">docs/recherches-perplexity.md</a></p>
+      </div>
+      <ul class="sources" id="sources-list"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Laponie 2027 · trois frères, trois motoneiges</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <noscript><p class="banner">Active JavaScript pour afficher le contenu et voter.</p></noscript>
+</body>
+</html>
