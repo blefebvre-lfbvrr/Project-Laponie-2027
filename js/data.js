@@ -299,8 +299,8 @@ export const QUESTIONS = [
   {
     id: "formule",
     title: "Quelle formule de raid ?",
-    help: "La grosse décision. Un seul choix.",
-    multiple: false,
+    help: "Plusieurs choix possibles : coche toutes les formules qui te vont.",
+    multiple: true,
     options: [
       { id: "plan1", label: "Plan 1 – Base Rovaniemi + safaris", detail: "~1 300 – 1 700 €" },
       { id: "plan2", label: "Plan 2 – Raid 2 jours + Rovaniemi", detail: "~1 800 – 2 300 €" },
