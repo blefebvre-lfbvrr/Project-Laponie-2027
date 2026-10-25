@@ -1,5 +1,5 @@
-import { TRIP, VOTERS, PARENTS, SOURCES, PLANS, MAP_POINTS, MAP_ROUTES, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js";
-import { firebaseConfig } from "./firebase-config.js";
+import { TRIP, VOTERS, PARENTS, SOURCES, PLANS, MAP_POINTS, MAP_ROUTES, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js?v=20261025-1";
+import { firebaseConfig } from "./firebase-config.js?v=20261025-1";
 
 const FIREBASE_VERSION = "10.12.2";
 const LEAFLET_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4";

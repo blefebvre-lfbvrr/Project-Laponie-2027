@@ -48,3 +48,5 @@ python3 -m http.server 8000
 ## Modifier les questions
 
 Ajoute ou change une entrée de `QUESTIONS` dans `js/data.js` (`multiple: true` pour un choix multiple). Garde les `id` existants si des votes ont déjà été faits, sinon ils ne seront plus rattachés.
+
+Après toute modification de `js/` ou `css/`, change la valeur `?v=…` (même valeur aux 4 endroits, dans `index.html` et en haut de `js/app.js`) : sinon les navigateurs peuvent garder l'ancienne version en cache jusqu'à 10 minutes.
