@@ -217,8 +217,8 @@ function renderPlans() {
 function renderComparison() {
   const rows = [
     ["Lieu", (p) => p.place],
-    ["Itinérance", (p) => ["Non, retour en ville chaque soir", "2 jours / 1 nuit en lodge", "5 jours de boucles depuis Ruka"][p.number - 1]],
-    ["Motoneige", (p) => ["3–4 journées, 95–299 €/jour", "60–100 km + 80–120 km", "30–80 km/jour, une machine chacun"][p.number - 1]],
+    ["Itinérance", (p) => p.compare.roaming],
+    ["Motoneige", (p) => p.compare.riding],
     ["Budget / pers.", (p) => p.budget],
   ];
   const table = el(
@@ -304,7 +304,7 @@ function drawMap(fromParis = false) {
   map.layer.clearLayers();
   map.markers.clear();
   const color = { airport: cssVar("--map-airport"), stay: cssVar("--map-stay"), visit: cssVar("--map-visit"), raid: cssVar("--map-raid") };
-  const planColor = { plan1: cssVar("--plan1"), plan2: cssVar("--plan2"), plan3: cssVar("--plan3") };
+  const planColor = Object.fromEntries(PLANS.map((p) => [p.id, cssVar(`--${p.id}`)]));
 
   for (const route of MAP_ROUTES) {
     if (map.filter !== "all" && route.plan !== map.filter) continue;

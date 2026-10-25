@@ -24,6 +24,7 @@
   --plan1: #2563eb;
   --plan2: #0f9b7a;
   --plan3: #9333ea;
+  --plan4: #dc2626;
   --radius: 14px;
   --shadow: 0 1px 2px rgb(16 32 50 / 6%), 0 6px 20px rgb(16 32 50 / 6%);
   color-scheme: light;
@@ -52,6 +53,7 @@
     --plan1: #60a5fa;
     --plan2: #3fcfaa;
     --plan3: #c084fc;
+    --plan4: #f87171;
     color-scheme: dark;
   }
 }
@@ -78,6 +80,7 @@
   --plan1: #60a5fa;
   --plan2: #3fcfaa;
   --plan3: #c084fc;
+  --plan4: #f87171;
   color-scheme: dark;
 }
 

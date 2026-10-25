@@ -7,7 +7,7 @@ export const TRIP = {
   dates: "10 – 18 avril 2027",
   from: "Paris",
   summary:
-    "Trois frères, trois permis B, une motoneige chacun. Fin de saison hivernale : la neige est encore là autour de Rovaniemi et Ruka (la plupart des opérateurs tournent jusqu'à mi/fin avril), les hôtels sont au plus bas de l'année. Voici les trois formules étudiées : lisez, puis votez en bas de page.",
+    "Trois frères, trois permis B, une motoneige chacun. Fin de saison hivernale : la neige est encore là autour de Rovaniemi et Ruka (la plupart des opérateurs tournent jusqu'à mi/fin avril), les hôtels sont au plus bas de l'année. Voici les quatre formules étudiées : lisez, puis votez en bas de page.",
 };
 
 // Les trois votants. Change `name` pour mettre vos vrais prénoms.
@@ -58,6 +58,7 @@ export const PLANS = [
     budget: "1 300 – 1 700 €",
     budgetNote: "par personne, en duo sur motoneige ; compter +30 à 50 % sur les activités en solo",
     intensity: 1,
+    compare: { roaming: "Non, retour en ville chaque soir", riding: "3–4 journées, 95–299 €/jour" },
     idea:
       "On s'installe 6–7 nuits à Rovaniemi et on enchaîne 3 à 4 grosses journées motoneige (dont au moins une journée complète « into the wilderness ») + une ou deux journées husky, rennes, village du Père Noël. Confortable, mais pas d'itinérance : retour en ville chaque soir.",
     blocks: [
@@ -93,6 +94,7 @@ export const PLANS = [
     budget: "1 800 – 2 300 €",
     budgetNote: "par personne, une motoneige chacun sur le raid",
     intensity: 2,
+    compare: { roaming: "2 jours / 1 nuit en lodge", riding: "60–100 km + 80–120 km" },
     idea:
       "Rovaniemi comme base, avec au milieu un vrai mini-raid de 2 jours / 1 nuit : nuit dans un lodge isolé avec sauna, pension complète, puis jours libres ou safaris plus courts.",
     blocks: [
@@ -135,6 +137,7 @@ export const PLANS = [
     budget: "2 400 – 2 700 €",
     budgetNote: "par personne, une motoneige chacun incluse",
     intensity: 3,
+    compare: { roaming: "5 jours de boucles depuis Ruka", riding: "30–80 km/jour, une machine chacun" },
     idea:
       "Raid de 5 jours / 4 nuits très orienté motoneige, une machine par personne, sorties guidées tous les jours, hôtel à Ruka. Le plus « Far North », le plus cher et le plus physique.",
     blocks: [
@@ -159,22 +162,70 @@ export const PLANS = [
     cons: ["Le plus cher", "Vols vers Kuusamo moins fréquents", "Moins de temps pour le touristique"],
     sources: ["planetRide", "europeActive", "kuusamoSafaris", "rukaWeekly"],
   },
+  {
+    id: "plan4",
+    number: 4,
+    title: "Grand raid 4 jours depuis Rovaniemi",
+    tagline: "Le plan 2 en version longue",
+    place: "Rovaniemi + 3 nuits en pleine nature",
+    budget: "4 900 – 5 200 €",
+    budgetNote: "par personne, une motoneige chacun, départ public (2–12 pers.)",
+    intensity: 3,
+    compare: { roaming: "4 jours / 3 nuits en lodges et cabanes", riding: "400–500 km au total (~100–125 km/jour)" },
+    idea:
+      "Vendu sous la même bannière Arctic Expeditions que le raid du plan 2, au départ de Rovaniemi aussi, mais sur 4 jours : on garde la ferme de rennes, le lodge isolé et le fell, et on s'enfonce deux jours de plus dans le wilderness avant de revenir à Rovaniemi. Le vrai raid en itinérance, avec du temps avant/après pour le touristique.",
+    blocks: [
+      {
+        title: "L'expédition « Tour de Lapland »",
+        items: [
+          "4 jours de motoneige, ~400–500 km au total, niveau « exigeant » : bonne condition physique demandée.",
+          "Départ de Rovaniemi (ou Levi), saison janvier → avril : à confirmer pour la semaine du 12 avril.",
+          "Nuits en lodges / cabanes de wilderness, groupe de 7 max + guide, une motoneige par personne.",
+          "Tenue grand froid et bottes fournies. Franchise en cas de casse : 900 € par motoneige.",
+          "Prix : dès 4 400 €/pers. en départ public (2–12 pers.) ; en privé 5 200 €/pers. à 2–4.",
+          "Itinéraire exact non publié : demander à l'agence de passer par la ferme de rennes et le lodge du raid 2 jours.",
+        ],
+      },
+      {
+        title: "Budget par personne",
+        items: [
+          "Vols : 250 – 400 €",
+          "5 nuits à Rovaniemi hors raid (partagé à 3) : 220 – 270 €",
+          "Expédition 4 jours : 4 400 € (public) à 5 200 € (privé)",
+          "1 sortie husky ou rennes en plus : 100 – 200 €",
+        ],
+      },
+    ],
+    timeline: [
+      { day: "Sam. 10 avril", text: "Vol Paris → Rovaniemi, installation." },
+      { day: "11 avril", text: "Journée tranquille : Santa Claus Village, briefing de l'expédition." },
+      { day: "12 – 15 avril", text: "Raid 4 jours : ferme de rennes, lodge isolé, deux jours en profondeur dans le wilderness, fell et retour." },
+      { day: "16 avril", text: "Récup : sauna, husky ou rennes." },
+      { day: "17 avril", text: "Arktikum, shopping, dernier dîner." },
+      { day: "Dim. 18 avril", text: "Retour à Paris." },
+    ],
+    pros: ["Vraie itinérance de 4 jours", "Mêmes points de passage que le plan 2, en plus long", "Tout reste au départ de Rovaniemi"],
+    cons: ["Le plus cher, de loin", "Physique (400–500 km)", "Itinéraire et dispo d'avril à confirmer"],
+    sources: ["tourDeLapland", "arcticExpeditions", "heartOfWilderness"],
+  },
 ];
 
 // Carte interactive. `plans` : formules concernées. `approx: true` = emplacement indicatif
 // (l'agence communique le lieu exact à la réservation).
 export const MAP_POINTS = [
-  { id: "cdg", name: "Paris – Charles-de-Gaulle", lat: 49.0097, lng: 2.5479, kind: "airport", plans: ["plan1", "plan2", "plan3"], text: "Départ le samedi 10 avril, retour le dimanche 18." },
-  { id: "hel", name: "Helsinki – Vantaa", lat: 60.3172, lng: 24.9633, kind: "airport", plans: ["plan1", "plan2", "plan3"], text: "Escale habituelle vers Rovaniemi ou Kuusamo." },
-  { id: "rvn", name: "Aéroport de Rovaniemi", lat: 66.5648, lng: 25.8304, kind: "airport", plans: ["plan1", "plan2"], text: "Arrivée pour les plans 1 et 2, à 10 min du centre." },
-  { id: "rovaniemi", name: "Rovaniemi centre", lat: 66.5039, lng: 25.7294, kind: "stay", plans: ["plan1", "plan2"], text: "Base du séjour : hôtels 120–270 €/nuit en avril, départ des safaris motoneige." },
-  { id: "ounasvaara", name: "Chalets Ounasvaara", lat: 66.4986, lng: 25.7861, kind: "stay", plans: ["plan1", "plan2"], text: "Chalets avec sauna et cuisine, ~100–170 €/nuit en basse saison." },
-  { id: "santa", name: "Santa Claus Village", lat: 66.5436, lng: 25.8473, kind: "visit", plans: ["plan1", "plan2"], text: "Village du Père Noël, sur le cercle polaire arctique." },
-  { id: "arktikum", name: "Arktikum", lat: 66.5089, lng: 25.7266, kind: "visit", plans: ["plan1", "plan2"], text: "Musée sur l'Arctique et la Laponie : idéal pour la journée cool du 17 avril." },
+  { id: "cdg", name: "Paris – Charles-de-Gaulle", lat: 49.0097, lng: 2.5479, kind: "airport", plans: ["plan1", "plan2", "plan3", "plan4"], text: "Départ le samedi 10 avril, retour le dimanche 18." },
+  { id: "hel", name: "Helsinki – Vantaa", lat: 60.3172, lng: 24.9633, kind: "airport", plans: ["plan1", "plan2", "plan3", "plan4"], text: "Escale habituelle vers Rovaniemi ou Kuusamo." },
+  { id: "rvn", name: "Aéroport de Rovaniemi", lat: 66.5648, lng: 25.8304, kind: "airport", plans: ["plan1", "plan2", "plan4"], text: "Arrivée pour les plans 1 et 2, à 10 min du centre." },
+  { id: "rovaniemi", name: "Rovaniemi centre", lat: 66.5039, lng: 25.7294, kind: "stay", plans: ["plan1", "plan2", "plan4"], text: "Base du séjour : hôtels 120–270 €/nuit en avril, départ des safaris motoneige." },
+  { id: "ounasvaara", name: "Chalets Ounasvaara", lat: 66.4986, lng: 25.7861, kind: "stay", plans: ["plan1", "plan2", "plan4"], text: "Chalets avec sauna et cuisine, ~100–170 €/nuit en basse saison." },
+  { id: "santa", name: "Santa Claus Village", lat: 66.5436, lng: 25.8473, kind: "visit", plans: ["plan1", "plan2", "plan4"], text: "Village du Père Noël, sur le cercle polaire arctique." },
+  { id: "arktikum", name: "Arktikum", lat: 66.5089, lng: 25.7266, kind: "visit", plans: ["plan1", "plan2", "plan4"], text: "Musée sur l'Arctique et la Laponie : idéal pour la journée cool du 17 avril." },
   { id: "safaris", name: "Forêts au nord de Rovaniemi", lat: 66.68, lng: 25.75, kind: "raid", approx: true, plans: ["plan1"], text: "Zone typique des safaris journée (5–6 h, 2–3 h de conduite) au départ de Rovaniemi." },
-  { id: "rennes", name: "Ferme de rennes", lat: 66.72, lng: 26.05, kind: "visit", approx: true, plans: ["plan2"], text: "Jour 1 du raid Heart of Wilderness : visite de la ferme et repas au feu de camp." },
-  { id: "lodge", name: "Lodge isolé (nuit du raid)", lat: 66.93, lng: 26.3, kind: "raid", approx: true, plans: ["plan2"], text: "Nuit en pleine nature avec sauna traditionnel, après 60–100 km de motoneige." },
-  { id: "fell", name: "Fell (petite montagne)", lat: 66.82, lng: 25.6, kind: "raid", approx: true, plans: ["plan2"], text: "Jour 2 : free-ride dans la poudreuse et montée sur un fell, 80–120 km au total." },
+  { id: "rennes", name: "Ferme de rennes", lat: 66.72, lng: 26.05, kind: "visit", approx: true, plans: ["plan2", "plan4"], text: "Jour 1 du raid Heart of Wilderness : visite de la ferme et repas au feu de camp." },
+  { id: "lodge", name: "Lodge isolé (nuit du raid)", lat: 66.93, lng: 26.3, kind: "raid", approx: true, plans: ["plan2", "plan4"], text: "Nuit en pleine nature avec sauna traditionnel, après 60–100 km de motoneige." },
+  { id: "fell", name: "Fell (petite montagne)", lat: 66.82, lng: 25.6, kind: "raid", approx: true, plans: ["plan2", "plan4"], text: "Jour 2 : free-ride dans la poudreuse et montée sur un fell, 80–120 km au total." },
+  { id: "cabane2", name: "Cabane de wilderness (nuit 2)", lat: 67.28, lng: 26.75, kind: "raid", approx: true, plans: ["plan4"], text: "Plan 4, jour 2 : on continue vers le nord, forêts et marais gelés, nuit en cabane." },
+  { id: "cabane3", name: "Cabane de wilderness (nuit 3)", lat: 67.2, lng: 25.55, kind: "raid", approx: true, plans: ["plan4"], text: "Plan 4, jour 3 : traversée vers l'ouest par les lacs et les fells, dernière nuit en pleine nature." },
   { id: "kao", name: "Aéroport de Kuusamo", lat: 65.9876, lng: 29.2394, kind: "airport", plans: ["plan3"], text: "Arrivée du plan 3, transfert vers Ruka inclus dans les séjours." },
   { id: "ruka", name: "Ruka", lat: 66.1661, lng: 29.1404, kind: "stay", plans: ["plan3"], text: "Station nordique, hôtel du raid 5 jours. Départ des boucles motoneige (30 km, 25 km de nuit, 80 km le dernier jour)." },
   { id: "rukaHusky", name: "Fermes husky et rennes de Ruka", lat: 66.23, lng: 29.32, kind: "visit", approx: true, plans: ["plan3"], text: "Safaris motoneige + husky ou ferme de rennes, husky rides 5 km." },
@@ -190,6 +241,9 @@ export const MAP_ROUTES = [
   { plan: "plan2", kind: "transfer", points: ["rvn", "rovaniemi"] },
   { plan: "plan2", kind: "ride", points: ["rovaniemi", "rennes", "lodge"] },
   { plan: "plan2", kind: "ride", points: ["lodge", "fell", "rovaniemi"] },
+  { plan: "plan4", kind: "flight", points: ["cdg", "hel", "rvn"] },
+  { plan: "plan4", kind: "transfer", points: ["rvn", "rovaniemi"] },
+  { plan: "plan4", kind: "ride", points: ["rovaniemi", "rennes", "lodge", "cabane2", "cabane3", "fell", "rovaniemi"] },
   { plan: "plan3", kind: "flight", points: ["cdg", "hel", "kao"] },
   { plan: "plan3", kind: "transfer", points: ["kao", "ruka"] },
   { plan: "plan3", kind: "ride", points: ["ruka", "rukaHusky", "rukaLoop", "ruka"] },
@@ -242,6 +296,7 @@ export const QUESTIONS = [
       { id: "plan1", label: "Plan 1 – Base Rovaniemi + safaris", detail: "~1 300 – 1 700 €" },
       { id: "plan2", label: "Plan 2 – Raid 2 jours + Rovaniemi", detail: "~1 800 – 2 300 €" },
       { id: "plan3", label: "Plan 3 – Raid 5 jours Ruka", detail: "~2 400 – 2 700 €" },
+      { id: "plan4", label: "Plan 4 – Grand raid 4 jours Rovaniemi", detail: "~4 900 – 5 200 €" },
     ],
   },
   {
@@ -253,7 +308,8 @@ export const QUESTIONS = [
       { id: "lt1500", label: "Moins de 1 500 €" },
       { id: "1500-2000", label: "1 500 – 2 000 €" },
       { id: "2000-2500", label: "2 000 – 2 500 €" },
-      { id: "gt2500", label: "Plus de 2 500 €" },
+      { id: "gt2500", label: "2 500 – 4 000 €" },
+      { id: "gt4000", label: "Plus de 4 000 €" },
     ],
   },
   {
