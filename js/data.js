@@ -161,6 +161,40 @@ export const PLANS = [
   },
 ];
 
+// Carte interactive. `plans` : formules concernées. `approx: true` = emplacement indicatif
+// (l'agence communique le lieu exact à la réservation).
+export const MAP_POINTS = [
+  { id: "cdg", name: "Paris – Charles-de-Gaulle", lat: 49.0097, lng: 2.5479, kind: "airport", plans: ["plan1", "plan2", "plan3"], text: "Départ le samedi 10 avril, retour le dimanche 18." },
+  { id: "hel", name: "Helsinki – Vantaa", lat: 60.3172, lng: 24.9633, kind: "airport", plans: ["plan1", "plan2", "plan3"], text: "Escale habituelle vers Rovaniemi ou Kuusamo." },
+  { id: "rvn", name: "Aéroport de Rovaniemi", lat: 66.5648, lng: 25.8304, kind: "airport", plans: ["plan1", "plan2"], text: "Arrivée pour les plans 1 et 2, à 10 min du centre." },
+  { id: "rovaniemi", name: "Rovaniemi centre", lat: 66.5039, lng: 25.7294, kind: "stay", plans: ["plan1", "plan2"], text: "Base du séjour : hôtels 120–270 €/nuit en avril, départ des safaris motoneige." },
+  { id: "ounasvaara", name: "Chalets Ounasvaara", lat: 66.4986, lng: 25.7861, kind: "stay", plans: ["plan1", "plan2"], text: "Chalets avec sauna et cuisine, ~100–170 €/nuit en basse saison." },
+  { id: "santa", name: "Santa Claus Village", lat: 66.5436, lng: 25.8473, kind: "visit", plans: ["plan1", "plan2"], text: "Village du Père Noël, sur le cercle polaire arctique." },
+  { id: "arktikum", name: "Arktikum", lat: 66.5089, lng: 25.7266, kind: "visit", plans: ["plan1", "plan2"], text: "Musée sur l'Arctique et la Laponie : idéal pour la journée cool du 17 avril." },
+  { id: "safaris", name: "Forêts au nord de Rovaniemi", lat: 66.68, lng: 25.75, kind: "raid", approx: true, plans: ["plan1"], text: "Zone typique des safaris journée (5–6 h, 2–3 h de conduite) au départ de Rovaniemi." },
+  { id: "rennes", name: "Ferme de rennes", lat: 66.72, lng: 26.05, kind: "visit", approx: true, plans: ["plan2"], text: "Jour 1 du raid Heart of Wilderness : visite de la ferme et repas au feu de camp." },
+  { id: "lodge", name: "Lodge isolé (nuit du raid)", lat: 66.93, lng: 26.3, kind: "raid", approx: true, plans: ["plan2"], text: "Nuit en pleine nature avec sauna traditionnel, après 60–100 km de motoneige." },
+  { id: "fell", name: "Fell (petite montagne)", lat: 66.82, lng: 25.6, kind: "raid", approx: true, plans: ["plan2"], text: "Jour 2 : free-ride dans la poudreuse et montée sur un fell, 80–120 km au total." },
+  { id: "kao", name: "Aéroport de Kuusamo", lat: 65.9876, lng: 29.2394, kind: "airport", plans: ["plan3"], text: "Arrivée du plan 3, transfert vers Ruka inclus dans les séjours." },
+  { id: "ruka", name: "Ruka", lat: 66.1661, lng: 29.1404, kind: "stay", plans: ["plan3"], text: "Station nordique, hôtel du raid 5 jours. Départ des boucles motoneige (30 km, 25 km de nuit, 80 km le dernier jour)." },
+  { id: "rukaHusky", name: "Fermes husky et rennes de Ruka", lat: 66.23, lng: 29.32, kind: "visit", approx: true, plans: ["plan3"], text: "Safaris motoneige + husky ou ferme de rennes, husky rides 5 km." },
+  { id: "rukaLoop", name: "Boucle 80 km (dernier jour)", lat: 66.38, lng: 29.0, kind: "raid", approx: true, plans: ["plan3"], text: "Grande boucle du dernier jour dans les forêts et lacs gelés autour de Ruka." },
+];
+
+// Tracés : `flight` en pointillés, `ride` (motoneige) en trait plein, `transfer` en tirets courts.
+export const MAP_ROUTES = [
+  { plan: "plan1", kind: "flight", points: ["cdg", "hel", "rvn"] },
+  { plan: "plan1", kind: "transfer", points: ["rvn", "rovaniemi"] },
+  { plan: "plan1", kind: "ride", points: ["rovaniemi", "safaris", "rovaniemi"] },
+  { plan: "plan2", kind: "flight", points: ["cdg", "hel", "rvn"] },
+  { plan: "plan2", kind: "transfer", points: ["rvn", "rovaniemi"] },
+  { plan: "plan2", kind: "ride", points: ["rovaniemi", "rennes", "lodge"] },
+  { plan: "plan2", kind: "ride", points: ["lodge", "fell", "rovaniemi"] },
+  { plan: "plan3", kind: "flight", points: ["cdg", "hel", "kao"] },
+  { plan: "plan3", kind: "transfer", points: ["kao", "ruka"] },
+  { plan: "plan3", kind: "ride", points: ["ruka", "rukaHusky", "rukaLoop", "ruka"] },
+];
+
 export const PRACTICAL = [
   {
     title: "Vols Paris → Rovaniemi",

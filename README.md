@@ -9,7 +9,7 @@ Le site est branché sur le projet Firebase `projet-laponie-2027`. Si `apiKey` e
 | Fichier | Rôle |
 | --- | --- |
 | `index.html` | La page |
-| `js/data.js` | **Tout le contenu** : prénoms, plans, budgets, sources, questions de vote |
+| `js/data.js` | **Tout le contenu** : prénoms, plans, budgets, points de la carte (`MAP_POINTS`, `MAP_ROUTES`), sources, questions de vote |
 | `js/app.js` | Affichage et logique de vote |
 | `js/firebase-config.js` | Config Firebase (projet `projet-laponie-2027`) |
 | `css/styles.css` | Style (clair/sombre, mobile) |

@@ -17,6 +17,13 @@
   --aurora-1: #3ee0b0;
   --aurora-2: #6c8cff;
   --aurora-3: #b06cff;
+  --map-airport: #56667a;
+  --map-stay: #2563eb;
+  --map-visit: #d97706;
+  --map-raid: #0f7b6c;
+  --plan1: #2563eb;
+  --plan2: #0f9b7a;
+  --plan3: #9333ea;
   --radius: 14px;
   --shadow: 0 1px 2px rgb(16 32 50 / 6%), 0 6px 20px rgb(16 32 50 / 6%);
   color-scheme: light;
@@ -38,6 +45,13 @@
     --warn-border: #7a5c1f;
     --danger: #ff7b72;
     --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 6px 20px rgb(0 0 0 / 25%);
+    --map-airport: #9db0c6;
+    --map-stay: #60a5fa;
+    --map-visit: #fbbf24;
+    --map-raid: #3fcfaa;
+    --plan1: #60a5fa;
+    --plan2: #3fcfaa;
+    --plan3: #c084fc;
     color-scheme: dark;
   }
 }
@@ -57,6 +71,13 @@
   --warn-border: #7a5c1f;
   --danger: #ff7b72;
   --shadow: 0 1px 2px rgb(0 0 0 / 30%), 0 6px 20px rgb(0 0 0 / 25%);
+  --map-airport: #9db0c6;
+  --map-stay: #60a5fa;
+  --map-visit: #fbbf24;
+  --map-raid: #3fcfaa;
+  --plan1: #60a5fa;
+  --plan2: #3fcfaa;
+  --plan3: #c084fc;
   color-scheme: dark;
 }
 
@@ -941,4 +962,178 @@ tbody th {
 .progress.parents {
   margin-top: 4px;
   color: var(--muted);
+}
+
+/* ---------- Carte ---------- */
+
+.map-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.map-filters .chip[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.map-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.map {
+  height: 480px;
+  background: var(--surface-2);
+  z-index: 0;
+}
+
+@media (max-width: 640px) {
+  .map {
+    height: 360px;
+  }
+}
+
+.map-error {
+  margin: 0;
+  padding: 24px;
+  color: var(--muted);
+}
+
+.map-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 10px 16px;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+.map-legend li + li {
+  margin-top: 0;
+}
+
+.map-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.swatch.airport { background: var(--map-airport); }
+.swatch.stay { background: var(--map-stay); }
+.swatch.visit { background: var(--map-visit); }
+.swatch.raid { background: var(--map-raid); }
+
+.map-legend .line {
+  width: 22px;
+  height: 0;
+  border-top: 2px dotted var(--muted);
+}
+
+.map-legend .line.ride {
+  border-top: 4px solid var(--accent);
+}
+
+.map-points {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: 8px;
+}
+
+.map-points li + li {
+  margin-top: 0;
+}
+
+.map-point {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.map-point:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.map-point:disabled {
+  cursor: default;
+}
+
+.map-point .swatch {
+  margin-top: 4px;
+}
+
+.map-point-text {
+  display: block;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.approx {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.map-popup p {
+  margin: 4px 0 0;
+}
+
+.map-popup-plans {
+  font-size: 0.8rem;
+  color: #56667a;
+}
+
+.leaflet-popup-content {
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #13202f;
+}
+
+.link-button {
+  font: inherit;
+  font-size: 0.9rem;
+  background: none;
+  border: 0;
+  padding: 4px 6px;
+  color: var(--accent-strong);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-button:disabled {
+  color: var(--muted);
+  cursor: default;
 }

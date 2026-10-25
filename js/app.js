@@ -1,7 +1,8 @@
-import { TRIP, VOTERS, PARENTS, SOURCES, PLANS, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js";
+import { TRIP, VOTERS, PARENTS, SOURCES, PLANS, MAP_POINTS, MAP_ROUTES, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const FIREBASE_VERSION = "10.12.2";
+const LEAFLET_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4";
 const VOTER_KEY = "laponie2027-voter";
 const DEMO_KEY = "laponie2027-votes-demo";
 
@@ -205,6 +206,158 @@ function renderComparison() {
     ),
   );
   document.getElementById("compare-table").append(table);
+}
+
+// ---------- Carte ----------
+
+function loadLeaflet() {
+  if (window.L) return Promise.resolve(window.L);
+  return new Promise((resolve, reject) => {
+    document.head.append(el("link", { rel: "stylesheet", href: `${LEAFLET_URL}/leaflet.css` }));
+    document.head.append(el("script", { src: `${LEAFLET_URL}/leaflet.js`, onload: () => resolve(window.L), onerror: reject }));
+  });
+}
+
+const POINTS_BY_ID = Object.fromEntries(MAP_POINTS.map((p) => [p.id, p]));
+const planLabel = (id) => `Plan ${PLANS.find((p) => p.id === id).number}`;
+
+const map = {
+  filter: "all",
+  leaflet: null,
+  markers: new Map(), // point id → marqueur Leaflet
+  layer: null,
+};
+
+const visiblePoints = () => MAP_POINTS.filter((p) => map.filter === "all" || p.plans.includes(map.filter));
+
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function pointPopup(p) {
+  return el(
+    "div",
+    { class: "map-popup" },
+    el("strong", {}, p.name),
+    p.approx && el("span", { class: "approx" }, " approx."),
+    el("p", {}, p.text),
+    el("p", { class: "map-popup-plans" }, p.plans.map(planLabel).join(" · ")),
+  );
+}
+
+function focusPoint(id) {
+  const marker = map.markers.get(id);
+  if (!marker || !map.leaflet) return;
+  document.getElementById("map").scrollIntoView({ block: "center" });
+  map.leaflet.flyTo(marker.getLatLng(), Math.max(map.leaflet.getZoom(), 9), { duration: 0.6 });
+  marker.openPopup();
+}
+
+function renderMapPoints() {
+  document.getElementById("map-points").replaceChildren(
+    ...visiblePoints().map((p) =>
+      el(
+        "li",
+        {},
+        el(
+          "button",
+          { type: "button", class: "map-point", onclick: () => focusPoint(p.id), disabled: !map.leaflet },
+          el("span", { class: `swatch ${p.kind}`, "aria-hidden": "true" }),
+          el("span", {}, el("strong", {}, p.name), p.approx && el("span", { class: "approx" }, " approx."), el("span", { class: "map-point-text" }, p.text)),
+        ),
+      ),
+    ),
+  );
+}
+
+function drawMap(fromParis = false) {
+  const L = window.L;
+  if (!map.leaflet) return;
+  map.layer.clearLayers();
+  map.markers.clear();
+  const color = { airport: cssVar("--map-airport"), stay: cssVar("--map-stay"), visit: cssVar("--map-visit"), raid: cssVar("--map-raid") };
+  const planColor = { plan1: cssVar("--plan1"), plan2: cssVar("--plan2"), plan3: cssVar("--plan3") };
+
+  for (const route of MAP_ROUTES) {
+    if (map.filter !== "all" && route.plan !== map.filter) continue;
+    const latlngs = route.points.map((id) => [POINTS_BY_ID[id].lat, POINTS_BY_ID[id].lng]);
+    const style =
+      route.kind === "ride"
+        ? { color: planColor[route.plan], weight: 4, opacity: 0.85 }
+        : route.kind === "flight"
+          ? { color: cssVar("--muted"), weight: 2, dashArray: "2 8", opacity: 0.8 }
+          : { color: cssVar("--muted"), weight: 2, dashArray: "6 6", opacity: 0.8 };
+    L.polyline(latlngs, style).addTo(map.layer);
+  }
+
+  for (const p of visiblePoints()) {
+    if (p.approx) {
+      L.circle([p.lat, p.lng], { radius: 6000, color: color[p.kind], weight: 1, dashArray: "4 4", fillOpacity: 0.08 }).addTo(map.layer);
+    }
+    const marker = L.circleMarker([p.lat, p.lng], {
+      radius: p.kind === "airport" ? 7 : 9,
+      color: "#ffffff",
+      weight: 2,
+      fillColor: color[p.kind],
+      fillOpacity: 1,
+    })
+      .bindTooltip(p.name)
+      .bindPopup(pointPopup(p))
+      .addTo(map.layer);
+    map.markers.set(p.id, marker);
+  }
+
+  const framed = visiblePoints().filter((p) => fromParis || !["cdg", "hel"].includes(p.id));
+  map.leaflet.fitBounds(
+    framed.map((p) => [p.lat, p.lng]),
+    { padding: [30, 30], maxZoom: 10 },
+  );
+}
+
+function renderMapFilters() {
+  const options = [{ id: "all", label: "Tout" }, ...PLANS.map((p) => ({ id: p.id, label: `Plan ${p.number}` }))];
+  document.getElementById("map-filters").replaceChildren(
+    ...options.map((o) =>
+      el(
+        "button",
+        {
+          type: "button",
+          class: "chip",
+          "aria-pressed": String(map.filter === o.id),
+          onclick: () => {
+            map.filter = o.id;
+            renderMapFilters();
+            renderMapPoints();
+            drawMap();
+          },
+        },
+        o.label,
+      ),
+    ),
+    el("button", { type: "button", class: "link-button", onclick: () => drawMap(true), disabled: !map.leaflet }, "Voir depuis Paris"),
+  );
+}
+
+async function initMap() {
+  renderMapFilters();
+  renderMapPoints();
+  let L;
+  try {
+    L = await loadLeaflet();
+  } catch (err) {
+    console.error(err);
+    document.getElementById("map").replaceChildren(el("p", { class: "map-error" }, "La carte n'a pas pu se charger. La liste des points reste disponible ci-dessous."));
+    return;
+  }
+  map.leaflet = L.map("map", { scrollWheelZoom: false });
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map.leaflet);
+  map.layer = L.layerGroup().addTo(map.leaflet);
+  renderMapFilters();
+  renderMapPoints();
+  drawMap();
 }
 
 function renderPractical() {
@@ -487,4 +640,5 @@ renderHero();
 renderPlans();
 renderComparison();
 renderPractical();
+initMap();
 initVotes();

@@ -17,6 +17,7 @@
     <div class="links">
       <a href="#plans">Formules</a>
       <a href="#comparatif">Comparatif</a>
+      <a href="#carte">Carte</a>
       <a href="#pratique">Pratique</a>
       <a class="cta" href="#votes">Voter</a>
     </div>
@@ -47,6 +48,26 @@
         <h2>En un coup d'œil</h2>
       </div>
       <div class="table-wrap" id="compare-table"></div>
+    </section>
+
+    <section id="carte" class="section">
+      <div class="section-head">
+        <h2>La carte</h2>
+        <p>Points de passage de chaque formule. Les lieux marqués « approx. » sont indicatifs : l'agence donne l'emplacement exact à la réservation.</p>
+      </div>
+      <div class="map-filters" id="map-filters" role="group" aria-label="Formule affichée"></div>
+      <div class="map-card">
+        <div class="map" id="map" role="region" aria-label="Carte des points de passage"></div>
+        <ul class="map-legend" aria-hidden="true">
+          <li><span class="swatch airport"></span>Aéroport</li>
+          <li><span class="swatch stay"></span>Hébergement</li>
+          <li><span class="swatch visit"></span>Visite / activité</li>
+          <li><span class="swatch raid"></span>Étape motoneige</li>
+          <li><span class="line flight"></span>Vol</li>
+          <li><span class="line ride"></span>Motoneige</li>
+        </ul>
+      </div>
+      <ol class="map-points" id="map-points"></ol>
     </section>
 
     <section id="pratique" class="section">
