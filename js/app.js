@@ -41,6 +41,9 @@ function storageSet(key, value) {
 
 const EVERYONE = [...VOTERS, ...PARENTS];
 const isParent = (id) => PARENTS.some((p) => p.id === id);
+// Sur grand écran les détails sont ouverts d'office ; sur téléphone on les replie.
+const WIDE = window.matchMedia("(min-width: 721px)").matches;
+
 const voterName = (id) => EVERYONE.find((v) => v.id === id)?.name ?? id;
 const voteKey = (questionId, voterId) => `${questionId}__${voterId}`;
 
@@ -161,31 +164,54 @@ function renderPlans() {
           ),
         ),
         el("p", { class: "plan-idea" }, plan.idea),
-        plan.blocks.map((block) =>
-          el("section", { class: "plan-block" }, el("h4", {}, block.title), el("ul", {}, block.items.map((t) => el("li", {}, t)))),
-        ),
-        plan.timeline &&
-          el(
-            "section",
-            { class: "plan-block" },
-            el("h4", {}, "Déroulé type"),
-            el(
-              "ol",
-              { class: "timeline" },
-              plan.timeline.map((step) => el("li", {}, el("strong", {}, step.day), " ", step.text)),
-            ),
-          ),
         el(
           "div",
           { class: "proscons" },
           el("ul", { class: "pros", "aria-label": "Points forts" }, plan.pros.map((t) => el("li", {}, t))),
           el("ul", { class: "cons", "aria-label": "Points faibles" }, plan.cons.map((t) => el("li", {}, t))),
         ),
-        sourceLinks(plan.sources),
+        el(
+          "details",
+          { class: "plan-more", open: WIDE },
+          el("summary", {}, "Détail, budget et sources"),
+          plan.blocks.map((block) =>
+            el("section", { class: "plan-block" }, el("h4", {}, block.title), el("ul", {}, block.items.map((t) => el("li", {}, t)))),
+          ),
+          plan.timeline &&
+            el(
+              "section",
+              { class: "plan-block" },
+              el("h4", {}, "Déroulé type"),
+              el(
+                "ol",
+                { class: "timeline" },
+                plan.timeline.map((step) => el("li", {}, el("strong", {}, step.day), " ", step.text)),
+              ),
+            ),
+          sourceLinks(plan.sources),
+        ),
         el("a", { class: "button ghost", href: "#q-formule" }, "Voter pour la formule →"),
       ),
     );
   }
+
+  // Carrousel sur téléphone : points indiquant la formule affichée.
+  const dots = document.getElementById("plans-dots");
+  const dotButtons = PLANS.map((plan, i) =>
+    el("button", {
+      type: "button",
+      class: "carousel-dot",
+      "aria-label": `Plan ${plan.number}`,
+      onclick: () => root.scrollTo({ left: root.children[i].offsetLeft - root.offsetLeft, behavior: "smooth" }),
+    }),
+  );
+  dots.replaceChildren(...dotButtons);
+  const syncDots = () => {
+    const i = Math.round(root.scrollLeft / (root.children[0].offsetWidth || 1));
+    dotButtons.forEach((d, j) => d.setAttribute("aria-current", String(i === j)));
+  };
+  root.addEventListener("scroll", syncDots, { passive: true });
+  syncDots();
 }
 
 function renderComparison() {
@@ -202,7 +228,9 @@ function renderComparison() {
     el(
       "tbody",
       {},
-      rows.map(([label, get]) => el("tr", {}, el("th", { scope: "row" }, label), PLANS.map((p) => el("td", {}, get(p))))),
+      rows.map(([label, get]) =>
+        el("tr", {}, el("th", { scope: "row" }, label), PLANS.map((p) => el("td", { "data-label": `Plan ${p.number}` }, get(p)))),
+      ),
     ),
   );
   document.getElementById("compare-table").append(table);
@@ -364,7 +392,13 @@ function renderPractical() {
   const root = document.getElementById("practical-list");
   for (const card of PRACTICAL) {
     root.append(
-      el("article", { class: "card" }, el("h3", {}, card.title), el("ul", {}, card.items.map((t) => el("li", {}, t))), sourceLinks(card.sources)),
+      el(
+        "details",
+        { class: "card fold", open: WIDE },
+        el("summary", {}, el("h3", {}, card.title)),
+        el("ul", {}, card.items.map((t) => el("li", {}, t))),
+        sourceLinks(card.sources),
+      ),
     );
   }
   document.getElementById("warnings-list").append(...WARNINGS.map((t) => el("li", {}, t)));
@@ -395,6 +429,7 @@ function parentVotesFor(questionId) {
 
 function renderVoterPicker() {
   const root = document.getElementById("voter-picker");
+  document.body.dataset.voter = state.voter ?? "";
   const chip = (v) =>
     el(
       "button",
@@ -433,6 +468,18 @@ function buildQuestion(q) {
   });
   ui.commentButton = el("button", { type: "button", class: "button small", onclick: () => saveComment(q) }, "Enregistrer");
   ui.comments = el("ul", { class: "comments" });
+  ui.commentToggle = el(
+    "button",
+    {
+      type: "button",
+      class: "link-button comment-toggle",
+      onclick: () => {
+        ui.article.classList.add("comment-open");
+        ui.comment.focus();
+      },
+    },
+    "💬 Ajouter un commentaire",
+  );
 
   const options = q.options.map((opt) => {
     const parts = {
@@ -442,31 +489,33 @@ function buildQuestion(q) {
         el("span", { class: "option-check", "aria-hidden": "true" }),
         el("span", { class: "option-text" }, el("span", { class: "option-label" }, opt.label), opt.detail && el("span", { class: "option-detail" }, opt.detail)),
       ),
+      row: null,
       bar: el("span", { class: "bar-fill" }),
       tally: el("span", { class: "tally" }),
       who: el("span", { class: "who" }),
       parents: el("span", { class: "who" }),
     };
     ui.options.set(opt.id, parts);
-    return el(
+    return (parts.row = el(
       "li",
       { class: "option-row" },
       parts.button,
       el("div", { class: "result" }, el("span", { class: "bar" }, parts.bar), parts.tally, parts.who, parts.parents),
-    );
+    ));
   });
 
   state.ui.set(q.id, ui);
-  return el(
+  return (ui.article = el(
     "article",
     { class: "question", id: `q-${q.id}` },
     el("header", {}, el("h3", {}, q.title), el("div", { class: "badges" }, ui.count, ui.consensus)),
     q.help && el("p", { class: "help" }, q.help),
     el("ul", { class: "options", role: q.multiple ? "group" : "radiogroup", "aria-label": q.title }, options),
     ui.hint,
+    ui.commentToggle,
     el("div", { class: "comment-box" }, ui.comment, ui.commentButton),
     ui.comments,
-  );
+  ));
 }
 
 function refreshQuestion(q, voterChanged) {
@@ -491,6 +540,7 @@ function refreshQuestion(q, voterChanged) {
     parts.tally.textContent = String(voters.length);
     parts.who.replaceChildren(...voters.map((id) => el("span", { class: "who-chip", title: voterName(id) }, voterName(id))));
     const parents = parentVotesFor(q.id).filter((v) => v.choices.includes(opt.id)).map((v) => v.voter);
+    parts.row.classList.toggle("empty", voters.length === 0 && parents.length === 0);
     parts.parents.replaceChildren(
       ...parents.map((id) => el("span", { class: "who-chip parent", title: `Avis de ${voterName(id)} (ne compte pas)` }, voterName(id))),
     );
@@ -504,6 +554,8 @@ function refreshQuestion(q, voterChanged) {
   if (state.voter && isParent(state.voter)) ui.hint.textContent += " Ton avis s'affiche à part et ne compte pas dans le résultat.";
 
   ui.comment.disabled = ui.commentButton.disabled = !state.voter;
+  ui.commentToggle.hidden = !state.voter;
+  if (voterChanged) ui.article.classList.toggle("comment-open", Boolean(mine?.comment));
   const typing = document.activeElement === ui.comment || ui.comment.dataset.dirty === "1";
   if (voterChanged || !typing) {
     ui.comment.value = mine?.comment ?? "";
@@ -642,3 +694,19 @@ renderComparison();
 renderPractical();
 initMap();
 initVotes();
+
+// Onglet actif de la barre du bas (téléphone).
+const tabs = [...document.querySelectorAll(".tabbar a")];
+const observer = new IntersectionObserver(
+  (entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      tabs.forEach((t) => t.setAttribute("aria-current", String(t.getAttribute("href") === `#${entry.target.id}`)));
+    }
+  },
+  { rootMargin: "-45% 0px -50% 0px" },
+);
+tabs.forEach((t) => {
+  const section = document.querySelector(t.getAttribute("href"));
+  if (section) observer.observe(section);
+});

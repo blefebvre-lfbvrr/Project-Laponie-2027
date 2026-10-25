@@ -2,7 +2,8 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1626">
   <title>Laponie 2027</title>
   <meta name="description" content="Raid motoneige en Laponie du 10 au 18 avril 2027 : les formules étudiées et les votes des trois frères.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
@@ -41,6 +42,7 @@
         <p>Prix indicatifs relevés en ligne, par personne, à revalider auprès des agences pour avril 2027.</p>
       </div>
       <div class="plans" id="plans-list"></div>
+      <div class="carousel-dots" id="plans-dots"></div>
     </section>
 
     <section id="comparatif" class="section">
@@ -67,7 +69,10 @@
           <li><span class="line ride"></span>Motoneige</li>
         </ul>
       </div>
-      <ol class="map-points" id="map-points"></ol>
+      <details class="map-list">
+        <summary>Liste des points de passage</summary>
+        <ol class="map-points" id="map-points"></ol>
+      </details>
     </section>
 
     <section id="pratique" class="section">
@@ -110,13 +115,35 @@
         <h2>Sources</h2>
         <p>Recherche complète : <a href="https://github.com/blefebvre-lfbvrr/Project-Laponie-2027/blob/claude/vibrant-mayer-2re17f/docs/recherches-perplexity.md" target="_blank" rel="noopener">docs/recherches-perplexity.md</a></p>
       </div>
-      <ul class="sources" id="sources-list"></ul>
+      <details class="fold">
+        <summary>Voir les liens</summary>
+        <ul class="sources" id="sources-list"></ul>
+      </details>
     </section>
   </main>
 
   <footer class="footer">
     <p>Laponie 2027 · trois frères, trois motoneiges</p>
   </footer>
+
+  <nav class="tabbar" aria-label="Navigation rapide">
+    <a href="#plans">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+      Formules
+    </a>
+    <a href="#carte">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg>
+      Carte
+    </a>
+    <a href="#pratique">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+      Infos
+    </a>
+    <a href="#votes" class="tab-vote">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+      Voter
+    </a>
+  </nav>
 
   <div class="toast" id="toast" role="status" hidden></div>
   <noscript><p class="banner">Active JavaScript pour afficher le contenu et voter.</p></noscript>
