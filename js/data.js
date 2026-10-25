@@ -13,9 +13,9 @@ export const TRIP = {
 // Les trois votants. Change `name` pour mettre vos vrais prénoms.
 // Les `id` doivent rester identiques à ceux de firestore.rules.
 export const VOTERS = [
-  { id: "frere1", name: "Frère 1" },
-  { id: "frere2", name: "Frère 2" },
-  { id: "frere3", name: "Frère 3" },
+  { id: "frere1", name: "Etienne" },
+  { id: "frere2", name: "Nicolas" },
+  { id: "frere3", name: "Benjamin" },
 ];
 
 export const SOURCES = {
