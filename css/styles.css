@@ -916,3 +916,29 @@ tbody th {
     position: static;
   }
 }
+
+/* ---------- Avis des parents ---------- */
+
+.picker-sep {
+  margin-left: 8px;
+  padding-left: 12px;
+  border-left: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.who-chip.parent {
+  background: var(--warn-bg);
+  color: var(--text);
+  border: 1px dashed var(--warn-border);
+}
+
+.comments li.parent {
+  background: var(--warn-bg);
+  border: 1px dashed var(--warn-border);
+}
+
+.progress.parents {
+  margin-top: 4px;
+  color: var(--muted);
+}

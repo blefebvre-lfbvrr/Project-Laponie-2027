@@ -1,7 +1,7 @@
 rules_version = '2';
 
 // Un document par (question, votant) : votes/{question}__{votant}.
-// Les identifiants des votants doivent correspondre à VOTERS dans js/data.js.
+// Les identifiants des votants doivent correspondre à VOTERS et PARENTS dans js/data.js.
 service cloud.firestore {
   match /databases/{database}/documents {
     match /votes/{voteId} {
@@ -10,7 +10,7 @@ service cloud.firestore {
       allow create, update: if request.auth != null
         && request.resource.data.keys().hasOnly(['question', 'voter', 'choices', 'comment', 'updatedAt'])
         && request.resource.data.keys().hasAll(['question', 'voter', 'choices', 'comment', 'updatedAt'])
-        && request.resource.data.voter in ['frere1', 'frere2', 'frere3']
+        && request.resource.data.voter in ['frere1', 'frere2', 'frere3', 'papa', 'maman']
         && request.resource.data.question is string
         && request.resource.data.question.size() <= 40
         && voteId == request.resource.data.question + '__' + request.resource.data.voter

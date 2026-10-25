@@ -1,4 +1,4 @@
-import { TRIP, VOTERS, SOURCES, PLANS, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js";
+import { TRIP, VOTERS, PARENTS, SOURCES, PLANS, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const FIREBASE_VERSION = "10.12.2";
@@ -38,7 +38,9 @@ function storageSet(key, value) {
   }
 }
 
-const voterName = (id) => VOTERS.find((v) => v.id === id)?.name ?? id;
+const EVERYONE = [...VOTERS, ...PARENTS];
+const isParent = (id) => PARENTS.some((p) => p.id === id);
+const voterName = (id) => EVERYONE.find((v) => v.id === id)?.name ?? id;
 const voteKey = (questionId, voterId) => `${questionId}__${voterId}`;
 
 let toastTimer;
@@ -128,6 +130,7 @@ function renderHero() {
   document.getElementById("trip-dates").textContent = `${TRIP.dates} · départ ${TRIP.from}`;
   document.getElementById("trip-summary").textContent = TRIP.summary;
   document.getElementById("trip-voters").textContent = VOTERS.map((v) => v.name).join(" · ");
+  document.getElementById("trip-parents").textContent = PARENTS.map((p) => p.name).join(" et ");
 }
 
 function renderPlans() {
@@ -223,36 +226,43 @@ function renderPractical() {
 
 const state = {
   store: null,
-  voter: VOTERS.some((v) => v.id === storageGet(VOTER_KEY)) ? storageGet(VOTER_KEY) : null,
+  voter: EVERYONE.some((v) => v.id === storageGet(VOTER_KEY)) ? storageGet(VOTER_KEY) : null,
   votes: new Map(), // clé question__votant → { question, voter, choices, comment }
   ui: new Map(), // question id → éléments à mettre à jour
 };
 
+// Votes des frères : les seuls qui comptent dans les résultats.
 function votesFor(questionId) {
   return VOTERS.map((v) => state.votes.get(voteKey(questionId, v.id))).filter(Boolean);
 }
 
+function parentVotesFor(questionId) {
+  return PARENTS.map((p) => state.votes.get(voteKey(questionId, p.id))).filter(Boolean);
+}
+
 function renderVoterPicker() {
   const root = document.getElementById("voter-picker");
+  const chip = (v) =>
+    el(
+      "button",
+      {
+        type: "button",
+        class: "chip",
+        "aria-pressed": String(state.voter === v.id),
+        onclick: () => {
+          state.voter = v.id;
+          storageSet(VOTER_KEY, v.id);
+          renderVoterPicker();
+          refreshAll(true);
+        },
+      },
+      v.name,
+    );
   root.replaceChildren(
     el("span", { class: "picker-label" }, "Je suis :"),
-    ...VOTERS.map((v) =>
-      el(
-        "button",
-        {
-          type: "button",
-          class: "chip",
-          "aria-pressed": String(state.voter === v.id),
-          onclick: () => {
-            state.voter = v.id;
-            storageSet(VOTER_KEY, v.id);
-            renderVoterPicker();
-            refreshAll(true);
-          },
-        },
-        v.name,
-      ),
-    ),
+    ...VOTERS.map(chip),
+    el("span", { class: "picker-sep" }, "Parents :"),
+    ...PARENTS.map(chip),
   );
 }
 
@@ -282,13 +292,14 @@ function buildQuestion(q) {
       bar: el("span", { class: "bar-fill" }),
       tally: el("span", { class: "tally" }),
       who: el("span", { class: "who" }),
+      parents: el("span", { class: "who" }),
     };
     ui.options.set(opt.id, parts);
     return el(
       "li",
       { class: "option-row" },
       parts.button,
-      el("div", { class: "result" }, el("span", { class: "bar" }, parts.bar), parts.tally, parts.who),
+      el("div", { class: "result" }, el("span", { class: "bar" }, parts.bar), parts.tally, parts.who, parts.parents),
     );
   });
 
@@ -326,6 +337,10 @@ function refreshQuestion(q, voterChanged) {
     parts.bar.style.width = `${(voters.length / VOTERS.length) * 100}%`;
     parts.tally.textContent = String(voters.length);
     parts.who.replaceChildren(...voters.map((id) => el("span", { class: "who-chip", title: voterName(id) }, voterName(id))));
+    const parents = parentVotesFor(q.id).filter((v) => v.choices.includes(opt.id)).map((v) => v.voter);
+    parts.parents.replaceChildren(
+      ...parents.map((id) => el("span", { class: "who-chip parent", title: `Avis de ${voterName(id)} (ne compte pas)` }, voterName(id))),
+    );
   }
 
   ui.hint.textContent = state.voter
@@ -333,6 +348,7 @@ function refreshQuestion(q, voterChanged) {
       ? "Clique pour cocher / décocher. C'est enregistré tout de suite."
       : "Clique pour choisir (re-clique pour annuler). C'est enregistré tout de suite."
     : "Choisis d'abord qui tu es, en haut de la section.";
+  if (state.voter && isParent(state.voter)) ui.hint.textContent += " Ton avis s'affiche à part et ne compte pas dans le résultat.";
 
   ui.comment.disabled = ui.commentButton.disabled = !state.voter;
   const typing = document.activeElement === ui.comment || ui.comment.dataset.dirty === "1";
@@ -342,26 +358,22 @@ function refreshQuestion(q, voterChanged) {
   }
 
   ui.comments.replaceChildren(
-    ...votes
+    ...[...votes, ...parentVotesFor(q.id)]
       .filter((v) => v.comment.trim())
-      .map((v) => el("li", {}, el("strong", {}, voterName(v.voter)), " ", v.comment)),
+      .map((v) => el("li", { class: isParent(v.voter) ? "parent" : null }, el("strong", {}, voterName(v.voter)), " ", v.comment)),
   );
 }
 
 function refreshRecap() {
   const root = document.getElementById("recap");
-  const done = VOTERS.map((v) => ({
-    voter: v,
-    count: QUESTIONS.filter((q) => state.votes.get(voteKey(q.id, v.id))?.choices.length).length,
-  }));
+  const progress = (people) =>
+    people.map((v) => {
+      const count = QUESTIONS.filter((q) => state.votes.get(voteKey(q.id, v.id))?.choices.length).length;
+      return el("li", {}, el("strong", {}, v.name), ` ${count}/${QUESTIONS.length} questions`);
+    });
   root.replaceChildren(
-    el(
-      "ul",
-      { class: "progress" },
-      done.map(({ voter, count }) =>
-        el("li", {}, el("strong", {}, voter.name), ` ${count}/${QUESTIONS.length} questions`),
-      ),
-    ),
+    el("ul", { class: "progress" }, progress(VOTERS)),
+    el("ul", { class: "progress parents" }, el("li", {}, "Avis des parents :"), progress(PARENTS)),
     el(
       "ol",
       { class: "leaders" },
@@ -457,7 +469,7 @@ async function initVotes() {
     (docs) => {
       state.votes = new Map(
         docs
-          .filter((d) => VOTERS.some((v) => v.id === d.voter))
+          .filter((d) => EVERYONE.some((v) => v.id === d.voter))
           .map((d) => [voteKey(d.question, d.voter), { ...d, choices: d.choices ?? [], comment: d.comment ?? "" }]),
       );
       if (state.store.mode === "firebase") setStatus("Votes synchronisés en direct", "ok");

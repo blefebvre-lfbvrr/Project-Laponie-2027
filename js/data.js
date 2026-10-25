@@ -18,6 +18,13 @@ export const VOTERS = [
   { id: "frere3", name: "Benjamin" },
 ];
 
+// Les parents donnent leur avis : il s'affiche à part et ne compte pas dans le résultat.
+// Mêmes règles que VOTERS pour les `id` (repris dans firestore.rules).
+export const PARENTS = [
+  { id: "papa", name: "Papa" },
+  { id: "maman", name: "Maman" },
+];
+
 export const SOURCES = {
   manawa: { label: "Manawa – motoneige Rovaniemi", url: "https://www.manawa.com/fr/destinations/3157-rovaniemi/1504-motoneige" },
   manawaJournee: { label: "Manawa – safari journée 6 h", url: "https://www.manawa.com/fr-FR/activite/finlande/rovaniemi/motoneige/safari-en-motoneige-a-rovaniemi/8312" },

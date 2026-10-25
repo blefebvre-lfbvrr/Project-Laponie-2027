@@ -1,6 +1,6 @@
 # Laponie 2027 – raid motoneige
 
-Site statique (HTML/CSS/JS, sans build) qui présente les recherches pour le voyage du 10 au 18 avril 2027 et permet aux trois frères de voter sur chaque choix, avec un commentaire libre par question. Les votes sont stockés dans Firebase Firestore et s'affichent en direct chez tout le monde.
+Site statique (HTML/CSS/JS, sans build) qui présente les recherches pour le voyage du 10 au 18 avril 2027 et permet aux trois frères (et aux parents, pour avis) de voter sur chaque choix, avec un commentaire libre par question. Les votes sont stockés dans Firebase Firestore et s'affichent en direct chez tout le monde.
 
 Tant que Firebase n'est pas configuré, le site fonctionne en **mode démo** : les votes restent dans le navigateur de chacun.
 
@@ -20,6 +20,10 @@ Tant que Firebase n'est pas configuré, le site fonctionne en **mode démo** : l
 ## 1. Mettre vos prénoms
 
 Dans `js/data.js`, change les `name` de `VOTERS` (`"Frère 1"` → ton prénom, etc.). Ne touche pas aux `id` (`frere1`, `frere2`, `frere3`) : ils sont repris dans `firestore.rules`.
+
+Les parents (`PARENTS` : `papa`, `maman`) votent et commentent aussi, mais leur avis s'affiche à part et ne compte pas dans le résultat ni dans l'unanimité.
+
+Si tu as déjà publié les règles dans Firebase avant l'ajout des parents, **recolle la nouvelle version de `firestore.rules`** dans l'onglet Règles, sinon leurs votes seront refusés.
 
 ## 2. Brancher Firebase (gratuit, ~10 min)
 
