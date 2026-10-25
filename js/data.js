@@ -200,7 +200,7 @@ export const PLANS = [
           "4 nuits à Rovaniemi hors raids (partagé à 3) : 180 – 220 €",
           "Raid n°1 : 1 200 – 1 400 €",
           "Raid n°2 : 990 – 1 100 € (selon supplément solo)",
-          "Version encore moins chère (~2 300 €) : remplacer le raid n°2 par 2 safaris journée en solo (~300 € chacun), sans 2e nuit dehors.",
+          "« Plan 4 éco » (~2 300 €, proposé au vote) : on remplace le raid n°2 par 2 safaris journée en solo (~300 € chacun). Toujours 4 jours de motoneige, mais une seule nuit dehors.",
         ],
       },
     ],
@@ -306,6 +306,7 @@ export const QUESTIONS = [
       { id: "plan2", label: "Plan 2 – Raid 2 jours + Rovaniemi", detail: "~1 800 – 2 300 €" },
       { id: "plan3", label: "Plan 3 – Raid 5 jours Ruka", detail: "~2 400 – 2 700 €" },
       { id: "plan4", label: "Plan 4 – Double raid 4 jours Rovaniemi", detail: "~2 700 – 3 100 €" },
+      { id: "plan4eco", label: "Plan 4 éco – Raid 2 jours + 2 safaris journée", detail: "~2 300 €" },
     ],
   },
   {
