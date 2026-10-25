@@ -1,14 +1,6 @@
 // Contenu du site. Tout le texte est ici : modifie-le librement sans toucher à app.js.
-// Les `id` (votants, questions, options) servent de clés dans data/votes.json : ne les change pas
+// Les `id` (votants, questions, options) servent de clés dans Firebase : ne les change pas
 // une fois que des votes existent (les noms affichés, eux, peuvent changer à tout moment).
-// Ce fichier est aussi lu par scripts/apply-vote.mjs (GitHub Action) pour valider les votes reçus.
-
-// Dépôt où sont stockés les votes (data/votes.json) et où s'ouvrent les issues de vote.
-export const REPO = {
-  owner: "blefebvre-lfbvrr",
-  repo: "Project-Laponie-2027",
-  branch: "claude/vibrant-mayer-2re17f",
-};
 
 export const TRIP = {
   title: "Raid motoneige en Laponie",
@@ -18,18 +10,19 @@ export const TRIP = {
     "Trois frères, trois permis B, une motoneige chacun. Fin de saison hivernale : la neige est encore là autour de Rovaniemi et Ruka (la plupart des opérateurs tournent jusqu'à mi/fin avril), les hôtels sont au plus bas de l'année. Voici les trois formules étudiées : lisez, puis votez en bas de page.",
 };
 
-// `github` : identifiants GitHub autorisés à voter sous ce nom. Laisser vide = n'importe quel
-// compte peut voter sous ce nom ; le remplir empêche qu'un inconnu vote à votre place.
+// Les trois votants. Change `name` pour mettre vos vrais prénoms.
+// Les `id` doivent rester identiques à ceux de firestore.rules.
 export const VOTERS = [
-  { id: "frere1", name: "Etienne", github: [] },
-  { id: "frere2", name: "Nicolas", github: [] },
-  { id: "frere3", name: "Benjamin", github: [] },
+  { id: "frere1", name: "Etienne" },
+  { id: "frere2", name: "Nicolas" },
+  { id: "frere3", name: "Benjamin" },
 ];
 
 // Les parents donnent leur avis : il s'affiche à part et ne compte pas dans le résultat.
+// Mêmes règles que VOTERS pour les `id` (repris dans firestore.rules).
 export const PARENTS = [
-  { id: "papa", name: "Papa", github: [] },
-  { id: "maman", name: "Maman", github: [] },
+  { id: "papa", name: "Papa" },
+  { id: "maman", name: "Maman" },
 ];
 
 export const SOURCES = {
