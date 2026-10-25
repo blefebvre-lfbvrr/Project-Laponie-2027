@@ -14,6 +14,7 @@ Tant que Firebase n'est pas configuré, le site fonctionne en **mode démo** : l
 | `js/firebase-config.js` | Config Firebase (à remplir) |
 | `css/styles.css` | Style (clair/sombre, mobile) |
 | `firestore.rules` | Règles de sécurité Firestore |
+| `.nojekyll` | Désactive Jekyll sur GitHub Pages |
 | `docs/recherches-perplexity.md` | Recherche d'origine |
 
 ## 1. Mettre vos prénoms
@@ -33,12 +34,9 @@ La config Firebase est publique par nature (elle finit dans le navigateur) ; ce 
 
 ## 3. Publier sur GitHub Pages
 
-1. Sur GitHub : **Settings → Pages → Build and deployment → Source : GitHub Actions**.
-2. Pousse sur `main` (ou sur `claude/vibrant-mayer-2re17f`) : le workflow `.github/workflows/pages.yml` déploie le site.
-3. Si le déploiement depuis une branche autre que `main` est refusé, va dans **Settings → Environments → github-pages** et autorise cette branche, ou fusionne dans `main`.
-4. L'adresse s'affiche dans l'onglet **Actions** (de la forme `https://<ton-pseudo>.github.io/Project-Laponie-2027/`). Envoie-la à tes frères.
+Pages est configuré en **Deploy from a branch** sur `claude/vibrant-mayer-2re17f`, dossier `/ (root)` : chaque push republie le site (onglet **Actions**, « pages build and deployment »). Le fichier `.nojekyll` sert les fichiers tels quels.
 
-GitHub Pages sur un dépôt privé demande un compte payant ; sinon rends le dépôt public.
+Adresse : <https://blefebvre-lfbvrr.github.io/Project-Laponie-2027/>. Envoie-la à tes frères.
 
 ## Tester en local
 
