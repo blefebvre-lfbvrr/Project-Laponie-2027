@@ -67,13 +67,22 @@
         <p>Papa et Maman peuvent aussi voter et commenter : leur avis s'affiche à part (étiquettes en pointillés) et ne compte pas dans le résultat.</p>
       </div>
 
-      <p class="banner" id="demo-banner" hidden>
-        <strong>Mode démo.</strong> La base de votes Firebase n'est pas encore branchée : les votes restent dans ce navigateur et tes frères ne les voient pas. Voir le README pour l'activer.
-      </p>
+      <ol class="howto card">
+        <li><strong>Choisis ton nom</strong> et vote : tes choix restent sur ton appareil tant que tu ne les envoies pas.</li>
+        <li><strong>Envoyer mes votes</strong> ouvre une issue GitHub déjà remplie : connecte-toi (compte gratuit) et clique sur <em>Create</em>.</li>
+        <li>Un robot enregistre tes votes dans le dépôt (<code>data/votes.json</code>) et ferme l'issue. Ils apparaissent ici environ une minute après.</li>
+      </ol>
 
       <div class="picker-bar">
         <div class="picker" id="voter-picker"></div>
-        <p class="status" id="sync-status" role="status"></p>
+        <div class="send-box">
+          <button type="button" class="button small" id="send-votes" disabled>Envoyer mes votes</button>
+          <span class="send-note" id="send-note"></span>
+        </div>
+        <div class="sync">
+          <p class="status" id="sync-status" role="status"></p>
+          <button type="button" class="link-button" id="refresh-votes">Rafraîchir</button>
+        </div>
       </div>
 
       <aside class="recap card" aria-labelledby="recap-title">
