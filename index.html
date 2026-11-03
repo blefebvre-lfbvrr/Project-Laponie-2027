@@ -7,8 +7,8 @@
   <title>Laponie 2027</title>
   <meta name="description" content="Raid motoneige en Laponie du 13 au 21 février 2027 : les formules étudiées et les votes des trois frères.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❄️</text></svg>">
-  <link rel="stylesheet" href="css/styles.css?v=20261103-1">
-  <script type="module" src="js/app.js?v=20261103-1"></script>
+  <link rel="stylesheet" href="css/styles.css?v=20261103-2">
+  <script type="module" src="js/app.js?v=20261103-2"></script>
 </head>
 <body>
   <a class="skip" href="#votes">Aller directement aux votes</a>
@@ -16,6 +16,7 @@
   <nav class="topnav" aria-label="Sections">
     <a class="brand" href="#top">Laponie 2027</a>
     <div class="links">
+      <a href="#recommande">Recommandé</a>
       <a href="#envies">Vos votes</a>
       <a href="#plans">Formules</a>
       <a href="#comparatif">Comparatif</a>
@@ -32,11 +33,22 @@
       <h1 id="trip-title"></h1>
       <p class="lead" id="trip-summary"></p>
       <p class="voters-line">Équipage : <span id="trip-voters"></span><br>Avec l'avis de <span id="trip-parents"></span></p>
-      <a class="button" href="#votes">Donner mon avis</a>
+      <div class="hero-actions">
+        <a class="button" href="#recommande">★ Voir le plan recommandé</a>
+        <a class="button ghost on-night" href="#votes">Donner mon avis</a>
+      </div>
     </div>
   </header>
 
   <main>
+    <section id="recommande" class="section">
+      <div class="section-head">
+        <h2>Le plan recommandé</h2>
+        <p>Les quatre plans passés au crible de vos conditions : celles que vous avez votées en octobre, plus la règle d'une motoneige chacun.</p>
+      </div>
+      <div id="reco"></div>
+    </section>
+
     <section id="envies" class="section">
       <div class="section-head">
         <h2>Ce qu'on garde de vos votes</h2>

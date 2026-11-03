@@ -1,5 +1,5 @@
-import { TRIP, VOTERS, PARENTS, PREFERENCES, SOURCES, PLANS, MAP_POINTS, MAP_ROUTES, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js?v=20261103-1";
-import { firebaseConfig } from "./firebase-config.js?v=20261103-1";
+import { TRIP, VOTERS, PARENTS, PREFERENCES, RECOMMENDATION, SOURCES, PLANS, MAP_POINTS, MAP_ROUTES, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js?v=20261103-2";
+import { firebaseConfig } from "./firebase-config.js?v=20261103-2";
 
 const FIREBASE_VERSION = "10.12.2";
 const LEAFLET_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4";
@@ -147,16 +147,94 @@ function renderPreferences() {
   );
 }
 
+const STATUS_LABEL = { ok: "Oui", mid: "En partie", ko: "Non" };
+const STATUS_ICON = { ok: "✓", mid: "~", ko: "✗" };
+
+function renderRecommendation() {
+  const root = document.getElementById("reco");
+  if (!root || !RECOMMENDATION) return;
+  const reco = PLANS.find((p) => p.id === RECOMMENDATION.plan);
+  const score = (planId) => RECOMMENDATION.criteria.filter((c) => c.cells[planId][0] === "ok").length;
+  const table = el(
+    "table",
+    { class: "checklist" },
+    el(
+      "thead",
+      {},
+      el(
+        "tr",
+        {},
+        el("th", { scope: "col" }, "Vos conditions"),
+        PLANS.map((p) => el("th", { scope: "col", class: p.id === reco.id ? "is-reco" : null }, `Plan ${p.number}${p.id === reco.id ? " ★" : ""}`)),
+      ),
+    ),
+    el(
+      "tbody",
+      {},
+      RECOMMENDATION.criteria.map((c) =>
+        el(
+          "tr",
+          {},
+          el("th", { scope: "row" }, c.label),
+          PLANS.map((p) => {
+            const [status, text] = c.cells[p.id];
+            return el(
+              "td",
+              { "data-label": `Plan ${p.number}`, class: p.id === reco.id ? "is-reco" : null },
+              el(
+                "span",
+                { class: "cell" },
+                el("span", { class: `status-pill ${status}`, title: STATUS_LABEL[status] }, el("span", { "aria-hidden": "true" }, STATUS_ICON[status]), el("span", { class: "visually-hidden" }, STATUS_LABEL[status])),
+                " ",
+                text,
+              ),
+            );
+          }),
+        ),
+      ),
+      el(
+        "tr",
+        { class: "score-row" },
+        el("th", { scope: "row" }, "Conditions cochées"),
+        PLANS.map((p) =>
+          el("td", { "data-label": `Plan ${p.number}`, class: p.id === reco.id ? "is-reco" : null }, el("strong", {}, `${score(p.id)} sur ${RECOMMENDATION.criteria.length}`)),
+        ),
+      ),
+    ),
+  );
+  root.append(
+    el(
+      "div",
+      { class: "reco-card" },
+      el("p", { class: "reco-badge" }, "★ Le plan qui remplit le plus vos conditions"),
+      el("h3", {}, RECOMMENDATION.title),
+      el("p", { class: "reco-meta" }, `${reco.place} · ${reco.budget} ${reco.budgetNote}`),
+      el("p", {}, RECOMMENDATION.summary),
+      el("div", { class: "reco-tradeoffs" }, el("h4", {}, "Ce qu'il faut accepter"), el("ul", {}, RECOMMENDATION.tradeoffs.map((t) => el("li", {}, t)))),
+      el(
+        "div",
+        { class: "reco-actions" },
+        el("a", { class: "button", href: `#${reco.id}` }, `Voir le plan ${reco.number} en détail`),
+        el("a", { class: "button ghost", href: "#q-formule-fev27" }, "Voter"),
+      ),
+    ),
+    el("div", { class: "table-wrap" }, table),
+  );
+}
+
 function renderPlans() {
   const root = document.getElementById("plans-list");
-  for (const plan of PLANS) {
+  // Le plan recommandé passe en premier (sur téléphone, c'est la première carte du carrousel).
+  const ordered = [...PLANS].sort((a, b) => Number(Boolean(b.recommended)) - Number(Boolean(a.recommended)));
+  for (const plan of ordered) {
     root.append(
       el(
         "article",
-        { class: "plan", id: plan.id },
+        { class: plan.recommended ? "plan recommended" : "plan", id: plan.id },
         el(
           "header",
           { class: "plan-head" },
+          plan.recommended && el("span", { class: "reco-badge small" }, "★ Recommandé : le plus conforme à vos conditions"),
           el("span", { class: "plan-number" }, `Plan ${plan.number}`),
           el("span", { class: "plan-tag" }, plan.tagline),
           el("h3", {}, plan.title),
@@ -207,7 +285,7 @@ function renderPlans() {
 
   // Carrousel sur téléphone : points indiquant la formule affichée.
   const dots = document.getElementById("plans-dots");
-  const dotButtons = PLANS.map((plan, i) =>
+  const dotButtons = ordered.map((plan, i) =>
     el("button", {
       type: "button",
       class: "carousel-dot",
@@ -235,12 +313,12 @@ function renderComparison() {
   const table = el(
     "table",
     {},
-    el("thead", {}, el("tr", {}, el("th", { scope: "col" }, ""), PLANS.map((p) => el("th", { scope: "col" }, `Plan ${p.number}`)))),
+    el("thead", {}, el("tr", {}, el("th", { scope: "col" }, ""), PLANS.map((p) => el("th", { scope: "col", class: p.recommended ? "is-reco" : null }, `Plan ${p.number}${p.recommended ? " ★" : ""}`)))),
     el(
       "tbody",
       {},
       rows.map(([label, get]) =>
-        el("tr", {}, el("th", { scope: "row" }, label), PLANS.map((p) => el("td", { "data-label": `Plan ${p.number}` }, get(p)))),
+        el("tr", {}, el("th", { scope: "row" }, label), PLANS.map((p) => el("td", { "data-label": `Plan ${p.number}${p.recommended ? " ★" : ""}`, class: p.recommended ? "is-reco" : null }, get(p)))),
       ),
     ),
   );
@@ -700,6 +778,7 @@ async function initVotes() {
 }
 
 renderHero();
+renderRecommendation();
 renderPreferences();
 renderPlans();
 renderComparison();

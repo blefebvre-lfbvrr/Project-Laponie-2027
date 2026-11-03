@@ -57,6 +57,50 @@ export const PREFERENCES = [
   },
 ];
 
+// Le plan mis en avant, et la grille qui le justifie face aux autres.
+// Statuts : "ok" = coché, "mid" = à moitié, "ko" = non.
+export const RECOMMENDATION = {
+  plan: "plan4",
+  title: "Plan 4 : Père Noël puis Inari",
+  summary:
+    "C'est le seul plan qui coche toutes vos conditions sauf une : une motoneige chacun garantie par l'opérateur, le Père Noël, une nuit dehors avec sauna, et surtout les meilleures chances d'aurores, votre priorité n°1. Il coûte environ 100 € de moins que le plan 1, pour un ciel bien plus noir.",
+  tradeoffs: [
+    "Deux trajets de bus d'environ 4 h 20 entre Rovaniemi et Inari.",
+    "≈ 2 800 € : 250 à 300 € de plus que les plans 2 et 3.",
+    "Une seule nuit dehors, comme les plans 1 et 2.",
+  ],
+  criteria: [
+    {
+      label: "Une motoneige chacun, garantie",
+      cells: { plan1: ["ok", "Écrit par l'opérateur"], plan2: ["ko", "Tarif à 2 par motoneige"], plan3: ["ok", "Tarif solo sur chaque sortie"], plan4: ["ok", "Imposé par l'opérateur"] },
+    },
+    {
+      label: "Père Noël (3 sur 3)",
+      cells: { plan1: ["ok", "Dimanche 14"], plan2: ["ok", "Dimanche 14"], plan3: ["ok", "Dimanche 14"], plan4: ["ok", "Dimanche 14"] },
+    },
+    {
+      label: "Aurores (3 sur 3)",
+      cells: { plan1: ["mid", "66,5°N"], plan2: ["mid", "66,5°N"], plan3: ["mid", "66°N"], plan4: ["ok", "69°N, ciel noir"] },
+    },
+    {
+      label: "Sauna (3 sur 3)",
+      cells: { plan1: ["ok", "Cabane du raid"], plan2: ["ok", "Cabane, sauna au bois"], plan3: ["mid", "Selon le logement"], plan4: ["ok", "Chalet du raid"] },
+    },
+    {
+      label: "Une vraie part de raid",
+      cells: { plan1: ["ok", "2 jours, 1 nuit dehors"], plan2: ["ok", "2 jours, 1 nuit dehors"], plan3: ["mid", "4 jours, sans nuit dehors"], plan4: ["ok", "2 jours, 1 nuit dehors"] },
+    },
+    {
+      label: "Paysages",
+      cells: { plan1: ["mid", "Forêts et fells"], plan2: ["mid", "Forêts et lacs"], plan3: ["mid", "Collines de Ruka"], plan4: ["ok", "Lac Inari, culture sami"] },
+    },
+    {
+      label: "Budget, vols compris",
+      cells: { plan1: ["mid", "≈ 2 900 €"], plan2: ["ok", "≈ 2 500 € + solo"], plan3: ["ok", "≈ 2 550 €"], plan4: ["mid", "≈ 2 800 €"] },
+    },
+  ],
+};
+
 export const SOURCES = {
   heartOfWilderness: { label: "Arctic Expeditions – Heart of Wilderness (2 jours)", url: "https://www.arcticexpeditions.fi/heart-of-wilderness/" },
   staylapland: { label: "StayLapland – nuit en cabane + 2 jours motoneige", url: "https://staylapland.com/product/snowmobile-in-the-arctic-nature/" },
@@ -262,6 +306,7 @@ export const PLANS = [
   {
     id: "plan4",
     number: 4,
+    recommended: true,
     title: "Grand Nord : Père Noël puis Inari",
     tagline: "Le meilleur pour les aurores",
     place: "Rovaniemi puis Inari (69°N)",
@@ -429,7 +474,7 @@ export const QUESTIONS = [
       { id: "plan1", label: "Plan 1 – Rovaniemi + raid 2 jours en cabane", detail: "≈ 2 900 €" },
       { id: "plan2", label: "Plan 2 – Rovaniemi éco + nuit à Kuoksa", detail: "≈ 2 500 € + solo à chiffrer" },
       { id: "plan3", label: "Plan 3 – Ruka, 4 jours de motoneige", detail: "≈ 2 550 €" },
-      { id: "plan4", label: "Plan 4 – Grand Nord : Père Noël puis Inari", detail: "≈ 2 800 €" },
+      { id: "plan4", label: "Plan 4 – Grand Nord : Père Noël puis Inari (recommandé)", detail: "≈ 2 800 €" },
     ],
   },
   {
