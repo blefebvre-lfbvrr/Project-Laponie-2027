@@ -1,5 +1,5 @@
-import { TRIP, VOTERS, PARENTS, SOURCES, PLANS, MAP_POINTS, MAP_ROUTES, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js?v=20261025-1";
-import { firebaseConfig } from "./firebase-config.js?v=20261025-1";
+import { TRIP, VOTERS, PARENTS, PREFERENCES, SOURCES, PLANS, MAP_POINTS, MAP_ROUTES, PRACTICAL, WARNINGS, QUESTIONS } from "./data.js?v=20261103-1";
+import { firebaseConfig } from "./firebase-config.js?v=20261103-1";
 
 const FIREBASE_VERSION = "10.12.2";
 const LEAFLET_URL = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4";
@@ -137,6 +137,16 @@ function renderHero() {
   document.getElementById("trip-parents").textContent = PARENTS.map((p) => p.name).join(" et ");
 }
 
+function renderPreferences() {
+  const root = document.getElementById("preferences-list");
+  if (!root) return;
+  root.append(
+    ...PREFERENCES.map((card) =>
+      el("article", { class: "card" }, el("h3", {}, card.title), el("ul", {}, card.items.map((t) => el("li", {}, t)))),
+    ),
+  );
+}
+
 function renderPlans() {
   const root = document.getElementById("plans-list");
   for (const plan of PLANS) {
@@ -219,6 +229,7 @@ function renderComparison() {
     ["Lieu", (p) => p.place],
     ["Itinérance", (p) => p.compare.roaming],
     ["Motoneige", (p) => p.compare.riding],
+    ["Aurores", (p) => p.compare.aurora],
     ["Budget / pers.", (p) => p.budget],
   ];
   const table = el(
@@ -689,6 +700,7 @@ async function initVotes() {
 }
 
 renderHero();
+renderPreferences();
 renderPlans();
 renderComparison();
 renderPractical();

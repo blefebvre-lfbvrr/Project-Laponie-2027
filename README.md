@@ -1,6 +1,6 @@
 # Laponie 2027 – raid motoneige
 
-Site statique (HTML/CSS/JS, sans build) qui présente les recherches pour le voyage du 10 au 18 avril 2027 et permet aux trois frères (et aux parents, pour avis) de voter sur chaque choix, avec un commentaire libre par question. Les votes sont stockés dans Firebase Firestore et s'affichent en direct chez tout le monde.
+Site statique (HTML/CSS/JS, sans build) qui présente les recherches pour le voyage du 13 au 21 février 2027 et permet aux trois frères (et aux parents, pour avis) de voter sur chaque choix, avec un commentaire libre par question. Les votes sont stockés dans Firebase Firestore et s'affichent en direct chez tout le monde.
 
 Le site est branché sur le projet Firebase `projet-laponie-2027`. Si `apiKey` est vidée dans `js/firebase-config.js`, il repasse en **mode démo** (votes gardés dans le navigateur de chacun).
 
@@ -9,13 +9,14 @@ Le site est branché sur le projet Firebase `projet-laponie-2027`. Si `apiKey` e
 | Fichier | Rôle |
 | --- | --- |
 | `index.html` | La page |
-| `js/data.js` | **Tout le contenu** : prénoms, plans, budgets, points de la carte (`MAP_POINTS`, `MAP_ROUTES`), sources, questions de vote |
+| `js/data.js` | **Tout le contenu** : prénoms, préférences déjà votées (`PREFERENCES`), plans, budgets, points de la carte (`MAP_POINTS`, `MAP_ROUTES`), sources, questions de vote |
 | `js/app.js` | Affichage et logique de vote |
 | `js/firebase-config.js` | Config Firebase (projet `projet-laponie-2027`) |
 | `css/styles.css` | Style (clair/sombre, mobile) |
 | `firestore.rules` | Règles de sécurité Firestore |
 | `.nojekyll` | Désactive Jekyll sur GitHub Pages |
-| `docs/recherches-perplexity.md` | Recherche d'origine |
+| `docs/recherches-fevrier-2027.md` | Recherche pour le 13 – 21 février 2027 |
+| `docs/recherches-perplexity.md` | Recherche d'origine (avril) |
 
 ## 1. Votants
 
@@ -48,5 +49,7 @@ python3 -m http.server 8000
 ## Modifier les questions
 
 Ajoute ou change une entrée de `QUESTIONS` dans `js/data.js` (`multiple: true` pour un choix multiple). Garde les `id` existants si des votes ont déjà été faits, sinon ils ne seront plus rattachés.
+
+Pour **remettre les votes à zéro** sans toucher à Firebase (les règles interdisent la suppression), donne de nouveaux `id` aux questions : c'est ce qui a été fait le 3 novembre 2026 avec le suffixe `-fev27`. Les anciens votes restent en base mais ne s'affichent plus.
 
 Après toute modification de `js/` ou `css/`, change la valeur `?v=…` (même valeur aux 4 endroits, dans `index.html` et en haut de `js/app.js`) : sinon les navigateurs peuvent garder l'ancienne version en cache jusqu'à 10 minutes.
